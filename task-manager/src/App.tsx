@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Navbar } from "./components/Navbar";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { Dashboard } from "./pages/Dashboard";
 import { TaskDetails } from "./pages/TaskDetails";
@@ -15,29 +16,45 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/tasks/create"
-          element={<CreateTask />}
+          element={
+            <ProtectedRoute>
+              <CreateTask />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/tasks/:id"
-          element={<TaskDetails />}
+          element={
+            <ProtectedRoute>
+              <TaskDetails />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/tasks/:id/edit"
-          element={<EditTask />}
+          element={
+            <ProtectedRoute>
+              <EditTask />
+            </ProtectedRoute>
+          }
         />
 
         <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

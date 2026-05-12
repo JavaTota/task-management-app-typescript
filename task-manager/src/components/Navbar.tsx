@@ -1,20 +1,51 @@
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Navbar = () => {
+  const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
+
   return (
-    <nav
-      style={{
-        display: "flex",
-        gap: "1rem",
-        padding: "1rem",
-        borderBottom: "1px solid #ccc",
-      }}
-    >
-      <Link to="/">Dashboard</Link>
+    <nav>
+      {isAuthenticated && (
+        <>
+          <Link to="/">Dashboard</Link>
+          <Link to="/tasks/create">Create Task</Link>
+        </>
+      )}
 
-      <Link to="/tasks/create">Create Task</Link>
+      {!isAuthenticated ? (
+        <>
+          <button onClick={() => loginWithRedirect()}>Login</button>
 
-      <Link to="/login">Login</Link>
+          <button
+            onClick={() =>
+              loginWithRedirect({
+                authorizationParams: {
+                  screen_hint: "signup",
+                },
+              })
+            }
+          >
+            Register
+          </button>
+        </>
+      ) : (
+        <>
+          <span>{user?.name}</span>
+
+          <button
+            onClick={() =>
+              logout({
+                logoutParams: {
+                  returnTo: window.location.origin,
+                },
+              })
+            }
+          >
+            Logout
+          </button>
+        </>
+      )}
     </nav>
   );
 };
